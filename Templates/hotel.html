@@ -1,0 +1,148 @@
+{% load static %}{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('{% static "images/E.jpg" %}');
+            background-size: cover;
+            color: #fff;
+            padding-top: 50px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .hotel-list-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .room-count {
+            background-color: transparent;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            color: #fff;
+            padding: 12px;
+            width: 10%;
+            box-sizing: border-box;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-body {
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-book {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-top: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-book:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="hotel-list-title">Hotels in {{ city }}</h2>
+        <div class="row">
+            {% if hotel1 %}
+            {% for hotel in hotel1 %}
+            <div class="col-md-6 mb-4">
+                <div class="card" style="background-image: url('{{ hotel.image.url }}');">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hotel.name }}</h5>
+                        <p class="card-text">Price: Rs {{ hotel.price }}</p>
+                        <p class="card-text">Available Rooms: <span class="available-rooms">{{ hotel.room }}</span></p>
+                        <label for="room-count">Rooms:</label>
+                        <input type="number" class="form-control room-count" value="1" min="1" max="{{ hotel.room }}">
+                        <button class="btn btn-primary btn-book" data-name="{{ hotel.name }}"
+                            data-price="{{ hotel.price }}" data-room="{{ hotel.room }}">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col">
+                <p>No hotels found in {{ city }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-book').click(function () {
+                const hotelName = $(this).data('name');
+                const price = parseFloat($(this).data('price'));
+                const roomCount = parseInt($(this).closest('.card-body').find('.room-count').val());
+                const totalPrice = price * roomCount;
+
+                const totalAmount = totalPrice;
+
+                localStorage.setItem('hotel_amount', totalAmount);
+                localStorage.setItem('hotel_name', hotelName);
+
+                window.location.href = "{% url 'checkout_hotel' %}";
+            });
+        });
+    </script>
+</body>
+
+</html>

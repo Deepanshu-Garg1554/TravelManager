@@ -1,0 +1,198 @@
+{% load static %}{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "images/ab.jpg" %}');
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #15172b
+        }
+
+        h2 {
+            color: white;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: white;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border-color: #007bff;
+
+            background-color: #303245;
+        }
+
+        .form-control:focus {
+            border-color: #0056b3;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-book {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-book:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Total Amount: <span id="totalAmountDisplay"></span></h2>
+        <form id="checkoutForm" method="POST" action="{% url 'checkout_hotel' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="state" name="state" required>
+            </div>
+            <div class="form-group">
+                <label for="zip_code">Zip Code</label>
+                <input type="text" class="form-control" id="zip_code" name="zip_code" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" class="form-control" id="phone" name="phone" maxlength="10" required>
+            </div>
+
+            {% if booking_type == 'package' %}
+            <div class="form-group">
+                <label for="check_in_date">Check-in Date</label>
+                <input type="date" class="form-control" id="check_in_date" name="check_in_date" required>
+            </div>
+            <div class="form-group">
+                <label for="num_passengers">Number of Passengers</label>
+                <input type="number" class="form-control" id="num_passengers" name="num_passengers" required>
+            </div>
+            {% endif %}
+            <input type="hidden" id="destination_name" name="destination_name">
+
+            <input type="hidden" id="flight_name" name="flight_name">
+            <input type="hidden" id="hotel_name" name="hotel_name">
+            <input type="hidden" id="totalAmount" name="totalAmount">
+            <input type="hidden" id="booking_type" name="booking_type" value="{{ booking_type }}">
+
+            <button type="submit" id="placeOrderBtn" class="btn btn-primary btn-block">Place Order</button>
+        </form>
+        {% if payment %}
+
+
+
+        <div class="container mx-auto text-center mt-4">
+
+            <form action="{%url 'success'%}" method="POST">
+                <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="rzp_test_C8d3vHaumly0RS"
+                    data-currency="INR" data-order_id="{{ payment.id }}" data-buttontext="Pay with Razorpay"
+                    data-name="Travel" data-description="Thanks for booking"
+                    data-image="https://example.com/your_logo.jpg" data-prefill.name="Reetinder"
+                    data-theme.color="#F37254"></script>
+                <input type="hidden" custom="Hidden Element" name="hidden">
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var bookingType = document.getElementById('booking_type').value;
+            var totalAmount;
+
+            if (bookingType === 'hotel') {
+                totalAmount = localStorage.getItem('hotel_amount');
+            }
+            else if (bookingType === 'flight') {
+                totalAmount = localStorage.getItem('flight_amount');
+            }
+            else {
+                totalAmount = localStorage.getItem('destination_amount');
+            }
+
+            document.getElementById('totalAmountDisplay').textContent = totalAmount;
+            document.getElementById('totalAmount').value = totalAmount;
+            document.getElementById('booking_type').value = bookingType;
+
+            if (bookingType === 'hotel') {
+                document.getElementById('hotel_name').value = localStorage.getItem('hotel_name');
+            } else if (bookingType === 'package') {
+                document.getElementById('destination_name').value = localStorage.getItem('destination_name');
+            }
+            else {
+                document.getElementById('flight_name').value = localStorage.getItem('flight_name');
+            }
+
+            document.getElementById('num_passengers').addEventListener('input', function () {
+                var numPassengers = parseInt(this.value);
+                if (!isNaN(numPassengers)) {
+                    totalAmount = parseInt(totalAmount);
+                    var updatedAmount = totalAmount * numPassengers;
+                    document.getElementById('totalAmountDisplay').textContent = updatedAmount;
+                    document.getElementById('totalAmount').value = updatedAmount;
+                }
+            });
+            // document.getElementById('placeOrderBtn').addEventListener('click', function (event) {
+            //     event.preventDefault();
+            // });
+        });
+
+    </script>
+
+</body>
+
+</html>

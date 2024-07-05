@@ -1,0 +1,367 @@
+{% load static %}{% static "images" as baseUrl %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Travelit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %} ">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gijgo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slicknav.css' %}">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'scss/_slider.scss' %}">
+    <style>
+        .sl_1 {
+            background-image: url('{% static "images/goa.jpg" %}');
+        }
+
+        .sl_2 {
+            background-image: url('{% static "images/jaipur.jpg" %}');
+        }
+
+        .sl_3 {
+            background-image: url('{% static "images/agra.jpg" %}');
+        }
+
+        .logo1 {
+            height: 100px;
+            width: 120px;
+        }
+
+        .size {
+            font-weight: bold;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-area ">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container-fluid">
+                    <div class="header_bottom_border">
+                        <div class="row align-items-center">
+                            <div class="col-xl-2 col-lg-2">
+                                <div class="logo">
+                                    <a href="index.html">
+                                        <img src="{% static 'images/logo.jpeg' %}" class="logo1" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 size">
+                                <div class="main-menu d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            {% if user.is_authenticated %}
+                                            <li>Hello, {{user.username}}</li>
+                                            <li><a href="logout">logout</a></li>
+                                            {%else%}
+                                            <li><a href="login">Login</a></li>
+                                            <li><a href="register">Register</a></li>
+                                            {%endif%}
+                                            <li><a class="active" href="{%url 'index'%}">home</a></li>
+                                            <li><a href="{% url 'customize'%}">Customized Trips </a>
+                                            </li>
+                                            <li><a href="{%url 'trips'%}">Upcoming Trips</a></li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="slider_area">
+        <div class="slider_active owl-carousel">
+
+            <div class="single_slider d-flex align-items-center sl_1 overlay">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="slider_text text-center">
+                                <h3>Goa</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single_slider d-flex align-items-center sl_2 overlay">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="slider_text text-center">
+                                <h3>Jaipur</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single_slider d-flex align-items-center sl_3  overlay">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="slider_text text-center">
+                                <h3>Agra</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popular_places_area">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="section_title text-center mb_70">
+                        <h3>Popular Places</h3>
+                        <p>Suffered alteration in some form, by injected humour or good day randomised booth anim 8-bit
+                            hella wolf moon beard words.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for detail in dest1 %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="{{ detail.img1.url }}" alt="">
+                            <a href="destination_details/{{ detail.dest_name }}" class="prise">₹{{ detail.price }}</a>
+                        </div>
+                        <div class="place_info">
+                            <a href='destination_details/{{ detail.dest_name }}'>
+                                <h3>{{ detail.dest_name }}</h3>
+                            </a>
+                            <p>{{ detail.country }}</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <span class="d-flex justify-content-center align-items-center">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <a href="#">(20 Review)</a>
+                                </span>
+                                <div class="days">
+                                    <i class="fa fa-clock-o"></i>
+                                    <a href='destination_details/{{ detail.dest_name }}'>{{ detail.days }} Days</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- <div class="row">
+                <div class="col-lg-12">
+                    <div class="more_place_btn text-center">
+                        <a class="boxed-btn4" href="#">More Places</a>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+
+    <div class="video_area video_bg overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="video_wrap text-center">
+                        <h3>Let us take you away</h3><br><br><br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="travel_variation_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_travel text-center">
+                        <div class="icon">
+                            <img src="{% static 'img/svg_icon/1.svg' %}" alt="">
+                        </div>
+                        <h3>Comfortable Journey</h3>
+                        <p>A wonderful serenity has taken to the possession of my entire soul.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_travel text-center">
+                        <div class="icon">
+                            <img src="{% static 'img/svg_icon/2.svg' %}" alt="">
+                        </div>
+                        <h3>Luxuries Hotel</h3>
+                        <p>A wonderful serenity has taken to the possession of my entire soul.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_travel text-center">
+                        <div class="icon">
+                            <img src="{% static 'img/svg_icon/3.svg' %}" alt="">
+                        </div>
+                        <h3>Travel Guide</h3>
+                        <p>A wonderful serenity has taken to the possession of my entire soul.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- testimonial_area  -->
+    <div class="testimonial_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="testmonial_active owl-carousel">
+
+
+                        <div class="single_carousel">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div class="single_testmonial text-center">
+                                        <div class="author_thumb">
+                                            <img src="{% static 'img/testmonial/author6.png' %}" alt="">
+                                        </div>
+                                        <p>"The gladdest moment in human life is a departure into unknown lands.</p>
+                                        <div class="testmonial_author">
+                                            <h3>- Alvero morte</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single_carousel">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div class="single_testmonial text-center">
+                                        <div class="author_thumb">
+                                            <img src="{% static 'img/testmonial/author.png' %}" alt="">
+                                        </div>
+                                        <p>"The gladdest moment in human life is a departure into unknown lands. </p>
+                                        <div class="testmonial_author">
+                                            <h3>- Alvaro M.</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single_carousel">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div class="single_testmonial text-center">
+                                        <div class="author_thumb">
+                                            <img src="{% static 'img/testmonial/author.png' %}" alt="">
+                                        </div>
+                                        <p>"Travel makes one modest. You see what a tiny place you occupy in the world.
+                                        </p>
+                                        <div class="testmonial_author">
+                                            <h3>- Shrey B.</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /testimonial_area  -->
+
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade custom_search_pop" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="serch_form">
+                    <input type="text" placeholder="Search">
+                    <button type="submit">search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/ajax-form.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/scrollIt.js' %}"></script>
+    <script src="{% static 'js/jquery.scrollUp.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/nice-select.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/gijgo.min.js' %}"></script>
+    <script src="{% static 'js/slick.min.js' %}"></script>
+
+
+
+
+    <!--contact js-->
+    <script src="{% static 'js/contact.js' %}"></script>
+    <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'js/jquery.form.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/mail-script.js' %}"></script>
+
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        $('#datepicker').datepicker({
+            iconsLibrary: 'fontawesome',
+            icons: {
+                rightIcon: '<span class="fa fa-caret-down"></span>'
+            }
+        });
+    </script>
+</body>
+
+</html>

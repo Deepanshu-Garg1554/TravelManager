@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "iosfwd": "cpp",
+        "deque": "cpp",
+        "format": "cpp",
+        "list": "cpp",
+        "xstring": "cpp"
+    }
+}

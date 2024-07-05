@@ -1,0 +1,155 @@
+{% load static %}{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if source == 'hotel' %}Search for Hotels{% elif source == 'flight' %}Search for Flights{% endif %}</title>
+    <style>
+        body {
+            background-image: url('{% if source == "hotel" %}{% static "images/b.jpg" %}{% elif source == "flight" %}{% static "images/c.jpg" %}{% endif %}');
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            padding-top: 50px;
+            margin: 0;
+            min-height: 100vh;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0);
+            /* Fully transparent background */
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            /* Increased shadow opacity for depth */
+            position: relative;
+            /* Added relative positioning */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            /* Changed title color to white */
+        }
+
+        form {
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 24px);
+            /* Adjusted width */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            color: #333;
+            /* Changed input text color to dark */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Semi-transparent input background */
+            position: relative;
+            /* Added relative positioning */
+            z-index: 1;
+            /* Added z-index */
+        }
+
+        input[type="submit"] {
+            width: auto;
+            background-color: rgba(7, 46, 71, 0.8);
+
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgba(41, 128, 185, 0.8);
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s;
+            background-color: rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-img-top {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .btn-book {
+            background-color: rgba(7, 52, 100, 0.8);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-top: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-book:hover {
+            background-color: rgba(7, 62, 121, 0.8);
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{% if source == 'hotel' %}Search for Hotels{% elif source == 'flight' %}Search for Flights{% endif %}</h1>
+        <form method="POST"
+            action="{% if source == 'hotel' %}{% url 'hotel' %}{% elif source == 'flight' %}{% url 'flight' %}{% endif %}">
+            {% csrf_token %}
+            {% for field in form_fields %}
+            {% if field == 'Check_Out_Date' %}
+            <input type="date" required name="{{ field }}" placeholder="{{ field|title }}">
+            {% else %}
+            <input type="text" required name="{{ field }}" placeholder="{{ field|title }}">
+            {% endif %}
+            <br>
+            {% endfor %}
+            <input type="submit" value="Search">
+        </form>
+
+    </div>
+</body>
+
+</html>

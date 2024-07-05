@@ -1,0 +1,59 @@
+{% load static %}{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customized Trips</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        .jumbotron {
+            background-image: url('{% static "images/a.jpg" %}');
+            background-size: cover;
+            height: 110vh;
+            color: white;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .btn-custom {
+            background-color: blue;
+            border-color: blue;
+            color: #212529;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #ffca28;
+            border-color: #ffca28;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="jumbotron text-center ">
+        <h1 class="display-4">Customized Trips</h1>
+        <p class="lead">Plan your perfect getaway with ease!</p>
+        <hr class="my-4">
+        <div class="btn-group" role="group" aria-label="Select Option">
+            <a href="{% url 'search' source='hotel' %}" class="btn btn-lg btn-custom">Hotels</a>
+            <a href="{% url 'search' source='flight' %}" class="btn btn-lg btn-custom">Flights</a>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

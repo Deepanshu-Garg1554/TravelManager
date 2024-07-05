@@ -1,0 +1,167 @@
+{% load static %}{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-image: url('{% static "images/d.jpg" %}');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            color: #fff;
+            padding-top: 50px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            margin-top: 50px;
+            color: #333;
+        }
+
+        .flight-list-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-body {
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+
+        }
+
+        .card-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-book {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-top: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-book:hover {
+            background-color: #0056b3;
+        }
+
+        .form-control {
+            width: 70%;
+            margin-bottom: 10px;
+            color: #fff;
+            background-color: #303245;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="flight-list-title">Flights from {{ from_city }} to {{ to_city }}</h2>
+        <div class="row">
+            {% if flight_list %}
+            {% for flight in flight_list %}
+            <div class="col-md-6 mb-4">
+                <div class="card" style="background-image: url('{{ flight.image.url }}');">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ flight.name }}</h5>
+                        <p class="card-text">Price: Rs {{ flight.price }}</p>
+                        <div class="form-group">
+                            <label for="flight-class">Class:</label>
+                            <select class="form-control flight-class" id="flight-class">
+                                <option value="economy">Economy</option>
+                                <option value="business">Business</option>
+                                <option value="first-class">First Class</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="num-passengers">Number of Passengers:</label>
+                            <input type="number" class="form-control num-passengers" value="1" min="1">
+                        </div>
+                        <button class="btn btn-primary btn-book" data-name="{{ flight.name }}"
+                            data-price="{{ flight.price }}">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col">
+                <p>No flights found from {{ from_city }} to {{ to_city }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-book').click(function () {
+                const flightName = $(this).data('name');
+                let price = parseFloat($(this).data('price'));
+                const flightClass = $(this).closest('.card-body').find('.flight-class').val();
+                const numPassengers = parseInt($(this).closest('.card-body').find('.num-passengers').val());
+
+                if (flightClass === 'business') {
+                    price *= 1.5;
+                } else if (flightClass === 'first-class') {
+                    price *= 2;
+                }
+
+                const totalPrice = price * numPassengers;
+
+                const totalAmount = totalPrice;
+
+                localStorage.setItem('flight_amount', totalAmount);
+                localStorage.setItem('flight_name', flightName);
+
+                window.location.href = "{% url 'checkout_flight' %}";
+            });
+        });
+    </script>
+</body>
+
+</html>
